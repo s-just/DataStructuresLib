@@ -6,7 +6,9 @@
 DLinkedList.h
 
 This class represents a basic doubly linked list data structure.
-It allows these operations: appending elements, removing elements, determining the size of the list, and clearing the list.
+Operations: 
+appending elements, removing elements, determining the size of the list, clearing the list,
+insert before and after index, reversing
 
 */
 
@@ -30,6 +32,11 @@ public:
     int size() const;
 
     void clear();
+
+    void insertAfterIndex(int index, const Type& value);
+    void insertBeforeIndex(int index, const Type& value);
+
+    void reverse();
 };
 
 
@@ -60,26 +67,26 @@ template<typename Type>
 void DLinkedList<Type>::append(const Type& value)
 {
     // Assign the pointer for the new node to a dynamically allocated pointer using the new keyword.
-    DNode<Type>* newNodePtr = new DNode<Type>(value);
+    DNode<Type>* newNode = new DNode<Type>(value);
 
     // If there is no memory address assigned to the head pointer yet... 
     // The list is empty and we need to add the new node using it's pointer.
     if (head == nullptr)
     {
-        head = newNodePtr;
-        tail = newNodePtr;
+        head = newNode;
+        tail = newNode;
     }
     // Otherwise, we see the list is not empty, and we need to update the tail node and both it's pointers.
     else
     {
 
         // Sets the prevNode of the current tail node (which will soon be changed) in the linked list to the newly created node.
-        newNodePtr->prevNode = tail;
+        newNode->prevNode = tail;
         // Sets the nextNode of the current tail node (which will soon be changed) in the linked list to the newly created node.
-        tail->nextNode = newNodePtr;
+        tail->nextNode = newNode;
         
         // Updates the linked list's tail to point to the new last node in the list rather than the node that was previously considered last.
-        tail = newNodePtr;
+        tail = newNode;
     }
 }
 
@@ -177,3 +184,134 @@ void DLinkedList<Type>::clear()
     head = nullptr;
     tail = nullptr;
 }
+
+
+template<typename Type>
+void DLinkedList<Type>::insertAfterIndex(int index, const Type& value)
+{
+    // Check if index is out of range
+    if (index < 0 || index >= size())
+    {
+        std::cout << "Index out of range.\n";
+        return;
+    }
+
+    // Create a new node
+    DNode<Type>* newNode = new DNode<Type>(value);
+
+    // Create a pointer for traversal, starting at the head of the list
+    DNode<Type>* currentNode = head;
+
+    // Traverse the list to find the node to insert after
+    for (int i = 0; i < index; ++i)
+    {
+        currentNode = currentNode->nextNode;
+    }
+
+    // Adjust the pointers to insert the new node
+    newNode->nextNode = currentNode->nextNode;
+    newNode->prevNode = currentNode;
+
+    if (currentNode->nextNode != nullptr)
+    {
+        currentNode->nextNode->prevNode = newNode;
+    }
+
+    currentNode->nextNode = newNode;
+
+    // If the node to insert after was the tail, update the tail pointer
+    if (currentNode == tail)
+    {
+        tail = newNode;
+    }
+}
+
+
+template<typename Type>
+void DLinkedList<Type>::insertBeforeIndex(int index, const Type& value)
+{
+    // Check if index is out of range
+    if (index < 0 || index >= size())
+    {
+        std::cout << "Index out of range.\n";
+        return;
+    }
+
+    // Create a new node
+    DNode<Type>* newNode = new DNode<Type>(value);
+
+    // Handle 0 index insertion
+    if (index == 0)
+    {
+        newNode->nextNode = head;
+        newNode->prevNode = nullptr;
+
+        if (head != nullptr)
+        {
+            head->prevNode = newNode;
+        }
+
+        head = newNode;
+
+        if (tail == nullptr)
+        {
+            tail = newNode;
+        }
+
+        return;
+    }
+
+    DNode<Type>* currentNode = head;
+
+    // Traverse the list to find the node to insert before
+    for (int i = 0; i < index - 1; ++i)
+    {
+        currentNode = currentNode->nextNode;
+    }
+
+    // Adjust the pointers 
+    newNode->nextNode = currentNode->nextNode;
+    newNode->prevNode = currentNode;
+
+    if (currentNode->nextNode != nullptr)
+    {
+        currentNode->nextNode->prevNode = newNode;
+    }
+
+    currentNode->nextNode = newNode;
+}
+
+
+template<typename Type>
+void DLinkedList<Type>::reverse()
+{
+    DNode<Type>* currentNode = head;
+    DNode<Type>* temp = nullptr;
+
+    // Swap the next and prev pointers 
+    while (currentNode != nullptr)
+    {
+        temp = currentNode->prevNode;
+        currentNode->prevNode = currentNode->nextNode;
+        currentNode->nextNode = temp;
+        currentNode = currentNode->prevNode;
+    }
+
+    // Swap the head and tail pointers
+    if (temp != nullptr)
+    {
+        head = temp->prevNode;
+    }
+
+    // Set the tail node as the head node, then correct the tail pointer
+    tail = head;
+    while (tail != nullptr && tail->nextNode != nullptr)
+    {
+        tail = tail->nextNode;
+    }
+}
+
+
+
+
+

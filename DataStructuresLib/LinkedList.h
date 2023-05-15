@@ -60,23 +60,23 @@ template<typename Type>
 void LinkedList<Type>::append(const Type& value)
 {
     // Assign the pointer for the new node to a dynamically allocated pointer using the new keyword.
-    Node<Type>* newNodePtr = new Node<Type>(value);
+    Node<Type>* newNode = new Node<Type>(value);
 
     // If there is no memory address assigned to the head pointer yet... 
     // The list is empty and we need to add the new node using it's pointer.
     if (head == nullptr)
     {
-        head = newNodePtr;
-        tail = newNodePtr;
+        head = newNode;
+        tail = newNode;
     }
     // Otherwise we can see the list is not empty and need to setup a new pointer for the previous tail node and change the tail of the list to point at that new node.
     else
     {
         // Sets the nextNode of the current tail node (which will soon be changed) in the linked list to the newly created node.
-        tail->nextNode = newNodePtr;
+        tail->nextNode = newNode;
 
         // Updates the linked list's tail to point to the new last node in the list rather than the node that was previously considered last.
-        tail = newNodePtr;
+        tail = newNode;
     }
 }
 

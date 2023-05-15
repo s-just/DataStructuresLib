@@ -57,4 +57,23 @@ int main()
     myLinkedList.clear();
     myLinkedList.printList();
 
+
+    DLinkedList<int> myDLinkedList = DLinkedList<int>();
+
+    myDLinkedList.append(3);
+    myDLinkedList.append(1);
+    myDLinkedList.append(5);
+
+    myDLinkedList.insertAfterIndex(0, 2);
+    myDLinkedList.insertBeforeIndex(0, 2);
+
+    myDLinkedList.insertBeforeIndex(3, 8);
+    myDLinkedList.insertAfterIndex(2, 7);
+
+    myDLinkedList.printList();
+
+    myDLinkedList.reverse();
+
+    myDLinkedList.printList();
+
 }
