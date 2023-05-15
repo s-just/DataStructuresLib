@@ -5,7 +5,7 @@ A file for testing the implementation of the data structures.
 */
 
 #include "LinkedList.h"
-
+#include "DLinkedList.h"
 int main()
 {
     std::cout << "Testing append...\n";
