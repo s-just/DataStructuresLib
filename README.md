@@ -1,5 +1,6 @@
 # DataStructuresLib
 
-Currently only has an implementation for:
+Currently has an implementation for:
 - singly linked list
-- doubly linked list
+- doubly linked list]
+- merge sort
