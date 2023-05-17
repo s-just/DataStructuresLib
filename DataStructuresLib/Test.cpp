@@ -64,15 +64,40 @@ int main()
     myDLinkedList.append(1);
     myDLinkedList.append(5);
 
+    std::cout << "\nTesting insertion methods...\n";
+
+    std::cout << "Before insertions: ";
+    myDLinkedList.printList();
+
     myDLinkedList.insertAfterIndex(0, 2);
     myDLinkedList.insertBeforeIndex(0, 2);
 
     myDLinkedList.insertBeforeIndex(3, 8);
     myDLinkedList.insertAfterIndex(2, 7);
 
+    std::cout << "After insertions: ";
     myDLinkedList.printList();
 
+
+    std::cout << "\nTesting reverse method...\n";
+
+    std::cout << "After reversing the list: ";
     myDLinkedList.reverse();
+
+    myDLinkedList.printList();
+
+
+
+    std::cout << "\nTesting sort method...\n";
+
+    std::cout << "Before sorting the list: ";
+    myDLinkedList.printList();
+
+    std::cout << "After sorting the list: ";
+
+    //myDLinkedList.mergeSort(myDLinkedList.getNode(0));
+
+    myDLinkedList.sort();
 
     myDLinkedList.printList();
 

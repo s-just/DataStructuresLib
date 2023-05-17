@@ -37,6 +37,18 @@ public:
     void insertBeforeIndex(int index, const Type& value);
 
     void reverse();
+
+    DNode<Type>* merge(DNode<Type>* first, DNode<Type>* second);
+
+    DNode<Type>* mergeSort(DNode<Type>* head);
+
+    DNode<Type>* partitionHalf(DNode<Type>* head);
+
+    DNode<Type>* getNode(int index) const;
+
+    void sort();
+
+
 };
 
 
@@ -139,6 +151,26 @@ void DLinkedList<Type>::removeValue(const Type& value)
 
     // We can safely delete the found node.
     delete currentNode;
+}
+
+template<typename Type>
+DNode<Type>* DLinkedList<Type>::getNode(int index) const {
+    DNode<Type>* temp = head;
+    int count = 0;
+
+    // Iterate through the list until we reach the desired index
+    while (temp != nullptr && count < index) {
+        temp = temp->nextNode;
+        count++;
+    }
+
+    // If we reached the end of the list before reaching the desired index,
+    // return nullptr to indicate that the index was out of range
+    if (count < index) {
+        return nullptr;
+    }
+
+    return temp;
 }
 
 template<typename Type>
@@ -310,6 +342,92 @@ void DLinkedList<Type>::reverse()
         tail = tail->nextNode;
     }
 }
+
+template<typename Type>
+void DLinkedList<Type>::sort() 
+{
+    head = mergeSort(head);
+
+    tail = head;
+    while (tail && tail->nextNode)
+        tail = tail->nextNode;
+}
+
+template<typename Type>
+DNode<Type>* DLinkedList<Type>::merge(DNode<Type>* first, DNode<Type>* second)
+{
+    if (!first) return second;
+    if (!second) return first;
+
+    if (first->data < second->data)
+    {
+        first->nextNode = merge(first->nextNode, second);
+        first->nextNode->prevNode = first;
+        first->prevNode = nullptr;
+        return first;
+    }
+    else
+    {
+        second->nextNode = merge(first, second->nextNode);
+        second->nextNode->prevNode = second;
+        second->prevNode = nullptr;
+        return second;
+    }
+    return first;
+}
+
+// 1. Split the list into two halves iteratively
+// 2. Recursively sort both halves using the head pointers.
+// 3. Merge the halves
+
+//TODO: Create an over-arching sort method that you can specify ascending/descending (sort then reverse), type of sort, etc.
+template<typename Type>
+DNode<Type>* DLinkedList<Type>::mergeSort(DNode<Type>* head)
+{
+    // Handle simple cases (when list is of size 0 or 1)
+    if (head == nullptr || head->nextNode == nullptr)
+        return head;
+    
+    // Split the list into two halves.
+    DNode<Type>* secondHead = partitionHalf(head);
+
+    // Recursively sort each half.
+    head = mergeSort(head); // Call the sort recursively starting with the first half.
+
+    secondHead = mergeSort(secondHead); // Call the sort recursively using the second half.
+
+    // Merge the sorted halves using merge, this occurs recursively through each subsequent mergeSort call made.
+    return merge(head, secondHead);
+
+}
+
+// Inputs: pointer of head node
+// Outputs: pointer for the head node of new list.
+// This method does not generate a new list, only the new head node for sorting purposes.
+template<typename Type>
+DNode<Type>* DLinkedList<Type>::partitionHalf(DNode<Type>* head)
+{
+    DNode<Type>* slow = head;
+    DNode<Type>* fast = head->nextNode;
+
+    while (fast != nullptr)
+    {
+        fast = fast->nextNode;
+        if (fast != nullptr)
+        {
+            slow = slow->nextNode;
+            fast = fast->nextNode;
+        }
+    }
+
+    DNode<Type>* temp = slow->nextNode;
+    slow->nextNode = nullptr;
+    if (temp != nullptr)
+        temp->prevNode = nullptr;
+
+    return temp;
+}
+
 
 
 
