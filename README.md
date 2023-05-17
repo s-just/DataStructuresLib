@@ -1,3 +1,5 @@
 # DataStructuresLib
 
-Currently only has an implementation of a linked list.
+Currently only has an implementation for:
+- singly linked list
+- doubly linked list
